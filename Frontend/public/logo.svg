@@ -1,0 +1,23 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect x="0" y="0" width="120" height="120" rx="28" fill="url(#grad)" />
+
+  <!-- Star -->
+  <path d="M60 30 
+           L66 54 
+           L90 60 
+           L66 66 
+           L60 90 
+           L54 66 
+           L30 60 
+           L54 54 Z"
+        fill="black"/>
+
+  <!-- Gradient -->
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2="120" y2="120">
+      <stop offset="0%" stop-color="#5f4bff"/>
+      <stop offset="100%" stop-color="#6a5cff"/>
+    </linearGradient>
+  </defs>
+</svg>

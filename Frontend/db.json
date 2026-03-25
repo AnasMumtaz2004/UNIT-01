@@ -1,0 +1,14 @@
+{
+  "login": { 
+    "token": "fake_jwt_123", 
+    "_id": "user_01", 
+    "name": "Test User", 
+    "email": "test@test.com" 
+  },
+  "register": { 
+    "token": "fake_jwt_456", 
+    "_id": "user_02", 
+    "name": "New User", 
+    "email": "new@test.com" 
+  }
+}
