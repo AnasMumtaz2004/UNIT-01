@@ -51,7 +51,7 @@ Create a `.env` file inside `Backend/`:
 ```dotenv
 PORT=3000
 MONGO_URI=mongodb://localhost:27017/ai-chatbot
-JWT_SECRET=anyrandomstring
+JWT_SECRET=generate_your_own_key
 GEMINI_API_KEY=your_gemini_key_here
 ```
 
