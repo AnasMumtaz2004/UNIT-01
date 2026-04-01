@@ -35,7 +35,7 @@ A full-stack AI chatbot I built as a college project using the MERN stack. Users
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/UNIT-01.git
+git clone https://github.com/AnasMumtaz2004/UNIT-01.git
 cd UNIT-01
 ```
 
