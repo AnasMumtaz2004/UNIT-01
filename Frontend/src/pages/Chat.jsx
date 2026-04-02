@@ -4,7 +4,8 @@ import Sidebar from '../components/Sidebar'
 import Message from '../components/Message'
 import ChatInput from '../components/ChatInput'
 
-const API_URL = 'http://localhost:3000/api'
+
+const API_URL = import.meta.env.VITE_API_URL
 
 const Chat = () => {
 

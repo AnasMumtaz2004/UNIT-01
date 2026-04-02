@@ -1,5 +1,4 @@
-// main.jsx - entry point for react app
-// just renders App into the #root div
+
 
 import React from "react";
 import ReactDOM from "react-dom/client";
