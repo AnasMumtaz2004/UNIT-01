@@ -21,9 +21,9 @@ const chatSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
-    tittle: {
+    title: {
         type: String,
-        deafault: "New Chat",
+        default: "New Chat",
     },
     messages: [messageSchema],
 },
@@ -32,5 +32,5 @@ const chatSchema = new mongoose.Schema({
     }
 );
 
-const Chat =mongoose.model("Chat",chatSchema);
-module.exports=Chat;
+const Chat = mongoose.model("Chat", chatSchema);
+module.exports = Chat;

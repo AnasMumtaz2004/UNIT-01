@@ -54,14 +54,14 @@ const Sidebar = ({ chats, currentChatId, onNewChat, onSelectChat, onDeleteChat, 
                 <div className='h-px bg-white/10 my-2' />
                 {chats.length === 0 ? (
                     <p className='text-gray-600 text-xs text-center mt-6 px-2'>
-                        No Chats yet.Start a Conversation!
+                        No Chats yet. Start a Conversation!
                     </p>
                 ) : (
                     chats.map((chat) => (
                         <div key={chat._id} className={`group flex items-center rounded-lg mb-0 transition-colors ${currentChatId === chat._id ? 'bg-white/10' : 'hover:bg-white/5'}`}>
                             <button className='flex-1 text-left px-3 py-2.5 min-w-0' onClick={() => handleSelectChat(chat._id)}>
                                 <p className={`text-sm truncate ${currentChatId === chat._id ? 'text-white' : 'text-gray-400 '}`}>
-                                    {chat.tittle}
+                                    {chat.title}
                                 </p>
                             </button>
 

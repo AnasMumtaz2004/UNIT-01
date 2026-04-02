@@ -58,7 +58,7 @@ function Login() {
             <div className="w-full max-w-md">
 
                 {/* logo */}
-                < div className="text-center mb-8">
+                <div className="text-center mb-8">
                     <div className="w-12 h-12 bg-indigo-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
                         <span className="text-white text-2xl">{'\u2726'}</span>
                     </div>
@@ -77,29 +77,59 @@ function Login() {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="" action="">
-                        <div>
-                            <label className="text-gray-400 text-sm block mb-0.5">Name</label>
-                            <input placeholder="Your Name required" type="text" className="w-full bg-[#0f0f1a] text-white border border-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder-gray-600" value={name} onChange={(e) => setName(e.target.value)} />
-                        </div>
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+                        {/* Name field — only shown during Register */}
+                        {isRegister && (
+                            <div>
+                                <label className="text-gray-400 text-sm block mb-0.5">Name</label>
+                                <input
+                                    placeholder="Your Name"
+                                    type="text"
+                                    className="w-full bg-[#0f0f1a] text-white border border-white/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder-gray-600"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            </div>
+                        )}
 
                         <div>
                             <label className="text-gray-400 text-sm block mb-0.5">Email</label>
-                            <input placeholder="you@example.com" type="email" className="w-full bg-[#0f0f1a] text-white border border-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder-gray-600" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <input
+                                placeholder="you@example.com"
+                                type="email"
+                                className="w-full bg-[#0f0f1a] text-white border border-white/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder-gray-600"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
                         </div>
 
                         <div>
                             <label className="text-gray-400 text-sm block mb-0.5">Password</label>
-                            <input placeholder="Your Password" type="password" className="w-full bg-[#0f0f1a] text-white border border-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder-gray-600" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <input
+                                placeholder="Your Password"
+                                type="password"
+                                className="w-full bg-[#0f0f1a] text-white border border-white/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder-gray-600"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                         </div>
 
-                        <button type="submit" disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg py-3 text-sm mt-2 transition-colors ">
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg py-3 text-sm mt-2 transition-colors"
+                        >
                             {loading ? "Please wait..." : isRegister ? "Create Account" : "Login"}
                         </button>
                     </form>
+
                     <p className="text-gray-400 text-sm mt-4 text-center">
                         {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
-                        <button onClick={() => { setIsRegister(!isRegister); setError(""); }} className="text-indigo-400 hover:text-indigo-300 font-medium">
+                        <button
+                            onClick={() => { setIsRegister(!isRegister); setError(""); }}
+                            className="text-indigo-400 hover:text-indigo-300 font-medium"
+                        >
                             {isRegister ? "Login" : "Register"}
                         </button>
                     </p>

@@ -3,11 +3,10 @@ const router = express.Router();
 const Chat = require("../models/Chat");
 const { protect } = require("../middleware/authMiddleware");
 
-// Gemini API 
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
+// Groq API
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-//Send message, get AI reply, save to db
-
+// Send message, get AI reply, save to db
 router.post("/", protect, async (req, res) => {
   const { message, chatId } = req.body;
 
@@ -15,15 +14,12 @@ router.post("/", protect, async (req, res) => {
     let chat;
 
     if (chatId) {
-      // load existing chat
       chat = await Chat.findById(chatId);
 
-      // make sure this chat belongs to logged in user
       if (!chat || chat.userId.toString() !== req.user._id.toString()) {
         return res.status(404).json({ message: "Chat not found" });
       }
     } else {
-
       chat = new Chat({
         userId: req.user._id,
         title: message.substring(0, 30) + (message.length > 30 ? "..." : ""),
@@ -31,61 +27,70 @@ router.post("/", protect, async (req, res) => {
       });
     }
 
-
     chat.messages.push({ role: "user", content: message });
 
-    const geminiMessages = chat.messages.map((msg) => ({
-      role: msg.role === "assistant" ? "model" : "user",
-      parts: [{ text: msg.content }],
+    const groqMessages = chat.messages.map((msg) => ({
+      role: msg.role === "assistant" ? "assistant" : "user",
+      content: msg.content,
     }));
 
-    const geminiRes = await fetch(
-      `${GEMINI_URL}?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: geminiMessages,
-        }),
+    const groqRes = await fetch(GROQ_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages: groqMessages,
+        max_tokens: 1024,
+      }),
+    });
+
+    const groqData = await groqRes.json();
+
+    if (!groqRes.ok) {
+      console.log("Groq error:", JSON.stringify(groqData, null, 2));
+
+      const status = groqRes.status;
+      const errMsg = groqData?.error?.message || "";
+
+      if (status === 429) {
+        return res.status(429).json({ message: "Rate limit hit. Wait a moment and try again." });
       }
-    );
 
-    const geminiData = await geminiRes.json();
+      if (status === 401) {
+        return res.status(401).json({ message: "Invalid GROQ_API_KEY — check your .env file." });
+      }
 
-    if (!geminiRes.ok) {
-      console.log("Gemini error:", geminiData);
-      return res.status(500).json({ message: "AI service error" });
+      return res.status(500).json({ message: "Groq error: " + errMsg });
     }
-    const aiReply = geminiData.candidates[0].content.parts[0].text;
 
+    const aiReply = groqData.choices[0].message.content;
 
     chat.messages.push({ role: "assistant", content: aiReply });
-
     await chat.save();
 
     res.json({
       chatId: chat._id,
       reply: aiReply,
       title: chat.title,
+      messages: chat.messages,
     });
+
   } catch (error) {
     console.log("Chat route error:", error.message);
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong: " + error.message });
   }
-}); // ✅ FIX: this was accidentally commented out before
+});
 
 
-
-//Get all chats for sidebar
-
+// Get all chats for sidebar
 router.get("/", protect, async (req, res) => {
   try {
-    // only fetch title and timestamps, skip messages array (saves bandwidth)
     const chats = await Chat.find({ userId: req.user._id })
       .select("title createdAt updatedAt")
-      .sort({ updatedAt: -1 }); // newest first
+      .sort({ updatedAt: -1 });
 
     res.json(chats);
   } catch (error) {
@@ -103,7 +108,6 @@ router.get("/:id", protect, async (req, res) => {
       return res.status(404).json({ message: "Chat not found" });
     }
 
-    // make sure user owns this chat
     if (chat.userId.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: "Access denied" });
     }
@@ -116,8 +120,7 @@ router.get("/:id", protect, async (req, res) => {
 });
 
 
-//Delete a chat
-
+// Delete a chat
 router.delete("/:id", protect, async (req, res) => {
   try {
     const chat = await Chat.findById(req.params.id);
