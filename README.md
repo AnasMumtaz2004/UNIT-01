@@ -48,7 +48,7 @@ Create a `.env` file inside `Backend/`:
 
 ```dotenv
 PORT=3000
-MONGO_URI=mongodb://localhost:27017/ai-chatbot
+MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=anyrandomstring
 GROQ_API_KEY=your_groq_key_here
 ```
